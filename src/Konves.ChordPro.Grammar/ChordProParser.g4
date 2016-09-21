@@ -13,10 +13,6 @@ syllable: chord | TEXT | chord TEXT ;
 
 chord: OPEN_BRACKET TEXT CLOSE_BRACKET;
 
-//songWord: ;
-
-//chord: OPEN_BRACKET CHORD_TEXT CLOSE_BRACKET ;
-
 directive:
 	(OPEN_BRACE (
 		NEW_SONG |
