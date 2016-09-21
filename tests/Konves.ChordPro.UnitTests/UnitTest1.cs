@@ -33,7 +33,6 @@ namespace Konves.ChordPro.UnitTests
 			// Act
 			DocumentContext result = parser.document();
 
-
 			// Assert
 			Assert.IsNotNull(result);
 		}
