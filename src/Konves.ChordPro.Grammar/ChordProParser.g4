@@ -3,7 +3,7 @@ options { tokenVocab=ChordProLexer; }
 
 document: (songLine | directive)* EOF ;
 
-songLine: WS? block(WS block)* WS? LINE_BREAK;
+songLine: block(WS block)* LINE_BREAK;
 
 block: chord | TEXT | word;
 
@@ -29,7 +29,7 @@ directive:
 		NEW_PAGE |
 		NEW_PHYSICAL_PAGE |
 		COLUMN_BREAK )
-	CLOSE_BRACE) |
+	CLOSE_BRACE) LINE_BREAK |
 	(OPEN_BRACE (
 		TITLE |
 		SUBTITLE |
@@ -45,4 +45,4 @@ directive:
 		TITLES |
 		COLUMNS |
 		PAGETYPE )
-	COLON ARGUMENT_TEXT CLOSE_BRACE_2) LINE_BREAK;
+	COLON TEXT CLOSE_BRACE) LINE_BREAK;

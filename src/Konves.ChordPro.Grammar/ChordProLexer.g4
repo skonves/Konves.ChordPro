@@ -1,19 +1,32 @@
 lexer grammar ChordProLexer;
 
+// Start of line
+WS: [ \t\r\n]+ -> skip; // chuck all preceding whitespace
+
+HASH: '#' -> skip, pushMode(LINECOMMENT);
+
 OPEN_BRACE : '{' -> pushMode(DIRECTIVE);
 
-LINE_BREAK: [\r\n]+;
-WS: [ \t]+;
+OPEN_BRACKET: '[' -> pushMode(SONGLINE);
+TEXT: ~[ #\{\r\n\[\]]+ -> pushMode(SONGLINE);
 
-OPEN_BRACKET: '[';
+mode SONGLINE;
+LINE_BREAK: [ \t]* [\r\n]+ -> popMode;
+SONGLINE_WS: [ \t]+ -> type(WS);
+
+SONGLINE_OPEN_BRACKET: '[' -> type(OPEN_BRACKET);
 CLOSE_BRACKET: ']';
 
-TEXT: ~[ \{\r\n\[\]]+;
+SONGLINE_TEXT: ~[ \{\r\n\[\]]+ -> type(TEXT);
+
+mode LINECOMMENT;
+COMMENT_TEXT: ~[\r\n]+ -> skip;
+COMMENT_LINE_BREAK: [\r\n]+ -> type(LINE_BREAK), popMode, skip;
 
 mode DIRECTIVE;
+DIRECTIVE_LINE_BREAK: [ \t]* [\r\n]+ -> type(LINE_BREAK), popMode;
 
-CLOSE_BRACE : '}' -> popMode ;
-
+CLOSE_BRACE : '}' ;
 COLON: ':' -> pushMode(ARGUMENT);
 
 // Preamble
@@ -47,5 +60,5 @@ COLUMN_BREAK: 'column_break' | 'colb';
 PAGETYPE: 'pagetype';
 
 mode ARGUMENT;
-ARGUMENT_TEXT: ~[\}\r\n]+;
-CLOSE_BRACE_2 : '}' -> popMode, popMode ;
+ARGUMENT_TEXT: ~[\}\r\n]+ -> type(TEXT);
+ARGUMENT_CLOSE_BRACE : '}' -> type(CLOSE_BRACE), popMode ;
