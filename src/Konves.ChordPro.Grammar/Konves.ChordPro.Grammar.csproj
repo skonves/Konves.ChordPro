@@ -64,10 +64,14 @@
     <Antlr4 Include="ChordProParser.g4">
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>Konves.ChordPro</CustomToolNamespace>
+      <Visitor>False</Visitor>
+      <Listener>False</Listener>
     </Antlr4>
     <Antlr4 Include="ChordProLexer.g4">
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>Konves.ChordPro</CustomToolNamespace>
+      <Listener>False</Listener>
+      <Visitor>False</Visitor>
     </Antlr4>
     <None Include="packages.config" />
   </ItemGroup>
@@ -85,8 +89,9 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy /Y $(ProjectDir)obj\$(ConfigurationName)\*.cs $(ProjectDir)..\Konves.ChordPro\
-del $(ProjectDir)..\Konves.ChordPro\TemporaryGeneratedFile*.cs</PostBuildEvent>
+    <PostBuildEvent>$(SolutionDir)tools\AntlrHelper\bin\$(ConfigurationName)\AntlrHelper.exe $(ProjectDir)obj\$(ConfigurationName)\ChordProParser.cs $(ProjectDir)..\Konves.ChordPro\Generated\ChordProParser.g.cs
+$(SolutionDir)tools\AntlrHelper\bin\$(ConfigurationName)\AntlrHelper.exe $(ProjectDir)obj\$(ConfigurationName)\ChordProLexer.cs $(ProjectDir)..\Konves.ChordPro\Generated\ChordProLexer.g.cs
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
