@@ -36,5 +36,22 @@ namespace Konves.ChordPro.UnitTests
 			// Assert
 			Assert.IsNotNull(result);
 		}
+
+		[TestMethod]
+		public void TestMethod2()
+		{
+			// Arrange
+			var assembly = Assembly.GetExecutingAssembly();
+			var resourceName = "Konves.ChordPro.UnitTests.Data.everybody-hurts.cho";
+
+			using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+			{
+				// Act
+				Document result = ChordProSerializer.Deserialize(stream);
+
+				// Assert
+				Assert.IsNotNull(result);
+			}
+		}
 	}
 }

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChordProSerializer.cs" />
     <Compile Include="Generated\ChordProLexer.g.cs" />
     <Compile Include="Generated\ChordProParser.g.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
