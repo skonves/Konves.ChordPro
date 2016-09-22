@@ -9,7 +9,7 @@ block: chord | TEXT | word;
 
 word: syllable+;
 
-syllable: chord | TEXT | chord TEXT ;
+syllable: chord TEXT | chord | TEXT ;
 
 chord: OPEN_BRACKET TEXT CLOSE_BRACKET;
 
