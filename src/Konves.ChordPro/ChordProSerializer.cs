@@ -23,6 +23,73 @@ namespace Konves.ChordPro
 			return new Document(lines);
 		}
 
+		public static void Serialize(Document document, TextWriter writer, bool shorten = false)
+		{
+			foreach (ILine line in document.Lines)
+			{
+				if (line is Directive)
+					writer.WriteLine(Map(line as Directive, shorten));
+				else if (line is SongLine)
+					writer.WriteLine(line.ToString());
+				else
+					throw new ArgumentException("unknown line type");
+			}
+		}
+
+		private static string Map(Directive directive, bool shorten)
+		{
+			if (directive is ChordColourDirective)
+				return $"{{chordcolour:{(directive as ChordColourDirective).Colour}}}";
+			else if (directive is ChordFontDirective)
+				return $"{{{(shorten ? "cf" : "chordfont")}:{(directive as ChordColourDirective).Colour}}}";
+			else if (directive is ChordSizeDirective)
+				return $"{{{(shorten ? "cs" : "chordsize")}:{(directive as ChordSizeDirective).FontSize}}}";
+			else if (directive is ColumnsDirective)
+				return $"{{{(shorten ? "col" : "columns")}:{(directive as ColumnsDirective).Number}}}";
+			else if (directive is ColumnBreakDirective)
+				return $"{{{(shorten ? "colb" : "column_break")}}}";
+			else if (directive is CommentDirective)
+				return $"{{{(shorten ? "c" : "comment")}:{(directive as CommentDirective).Text}}}";
+			else if (directive is CommentBoxDirective)
+				return $"{{{(shorten ? "cb" : "comment_box")}:{(directive as CommentBoxDirective).Text}}}";
+			else if (directive is CommentItalicDirective)
+				return $"{{{(shorten ? "ci" : "comment_italic")}:{(directive as CommentItalicDirective).Text}}}";
+			else if (directive is DefineDirective)
+				return $"{{define:{(directive as DefineDirective).Definition}}}"; // TODO: fix
+			else if (directive is EndOfChorusDirective)
+				return $"{{{(shorten ? "eoc" : "end_of_chorus")}}}";
+			else if (directive is EndOfTabDirective)
+				return $"{{{(shorten ? "eot" : "end_of_tab")}}}";
+			else if (directive is GridDirective)
+				return $"{{{(shorten ? "g" : "grid")}}}";
+			else if (directive is NewPageDirective)
+				return $"{{{(shorten ? "np" : "new_page")}}}";
+			else if (directive is NewPhysicalPageDirective)
+				return $"{{{(shorten ? "npp" : "new_physical_page")}}}";
+			else if (directive is NewSongDirective)
+				return $"{{{(shorten ? "ns" : "new_song")}}}";
+			else if (directive is NoGridDirective)
+				return $"{{{(shorten ? "ng" : "no_grid")}}}";
+			else if (directive is PageTypeDirective)
+				return $"{{pagetype:{(directive as PageTypeDirective).PageType.ToString().ToLower()}}}";
+			else if (directive is StartOfChorusDirective)
+				return $"{{{(shorten ? "soc" : "start_of_chorus")}}}";
+			else if (directive is StartOfTabDirective)
+				return $"{{{(shorten ? "sot" : "start_of_tab")}}}";
+			else if (directive is SubtitleDirective)
+				return $"{{{(shorten ? "st" : "subtitle")}:{(directive as SubtitleDirective).Text}}}";
+			else if (directive is TextFontDirective)
+				return $"{{{(shorten ? "tf" : "textfont")}:{(directive as TextFontDirective).FontFamily}}}";
+			else if (directive is TextSizeDirective)
+				return $"{{{(shorten ? "ts" : "textsize")}:{(directive as TextSizeDirective).FontSize}}}";
+			else if (directive is TitleDirective)
+				return $"{{{(shorten ? "t" : "title")}:{(directive as TitleDirective).Text}}}";
+			else if (directive is TitlesDirective)
+				return $"{{titles:{(directive as TitlesDirective).Flush.ToString().ToLower()}}}";
+			else
+				throw new ArgumentException("directive is not of a known directive type");
+		}
+
 		private static IEnumerable<ILine> Map(DocumentContext source)
 		{
 			foreach (IParseTree line in source.children)

@@ -4,6 +4,7 @@ using System.Reflection;
 using System.IO;
 using Antlr4.Runtime;
 using static Konves.ChordPro.ChordProParser;
+using System.Text;
 
 namespace Konves.ChordPro.UnitTests
 {
@@ -48,6 +49,28 @@ namespace Konves.ChordPro.UnitTests
 			{
 				// Act
 				Document result = ChordProSerializer.Deserialize(stream);
+
+				// Assert
+				Assert.IsNotNull(result);
+			}
+		}
+
+		[TestMethod]
+		public void TestMethod3()
+		{
+			// Arrange
+			var assembly = Assembly.GetExecutingAssembly();
+			var resourceName = "Konves.ChordPro.UnitTests.Data.everybody-hurts.cho";
+
+			using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+			{
+				Document doc = ChordProSerializer.Deserialize(stream);
+				StringBuilder sb = new StringBuilder();
+				TextWriter writer = new StringWriter(sb);
+
+				// Act
+				ChordProSerializer.Serialize(doc, writer);
+				string result = sb.ToString();
 
 				// Assert
 				Assert.IsNotNull(result);
