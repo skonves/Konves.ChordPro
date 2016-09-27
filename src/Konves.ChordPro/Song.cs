@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Konves.ChordPro
 {
@@ -11,28 +8,30 @@ namespace Konves.ChordPro
 	{
 		public Document(IEnumerable<ILine> lines)
 		{
-			Lines = lines is ReadOnlyCollection<ILine> ? (ReadOnlyCollection<ILine>)lines : new ReadOnlyCollection<ILine>(lines.ToList());
+			Lines = lines as List<ILine> ?? lines.ToList();
 		}
 
-		public ReadOnlyCollection<ILine> Lines { get; }
+		public List<ILine> Lines { get; set; }
 	}
 
 	public interface ILine { }
 
-	public sealed class Line : ILine
+	public sealed class SongLine : ILine
 	{
-		public Line(IEnumerable<Block> blocks)
+		public SongLine(IEnumerable<Block> blocks)
 		{
-			Blocks = blocks is ReadOnlyCollection<Block> ? (ReadOnlyCollection<Block>)blocks : new ReadOnlyCollection<Block>(blocks.ToList());
+			Blocks = blocks as List<Block> ?? blocks.ToList();
 		}
 
-		public ReadOnlyCollection<Block> Blocks { get; }
+		public List<Block> Blocks { get; set; }
+
+		public override string ToString()
+		{
+			return string.Join("   ", Blocks?.Select(s => s.ToString()) ?? Enumerable.Empty<string>());
+		}
 	}
 
-	public abstract class Block
-	{
-
-	}
+	public abstract class Block { }
 
 	public sealed class Chord : Block
 	{
@@ -41,7 +40,7 @@ namespace Konves.ChordPro
 			Text = text;
 		}
 
-		public string Text { get; }
+		public string Text { get; set; }
 
 		public override string ToString()
 		{
@@ -53,20 +52,15 @@ namespace Konves.ChordPro
 	{
 		public Word(string text)
 		{
-			Syllables = new ReadOnlyCollection<Syllable>(new[] { new Syllable(null, text) });
+			Syllables = new List<Syllable> { new Syllable(null, text) };
 		}
 
 		public Word(IEnumerable<Syllable> syllables)
 		{
-			Syllables =
-				syllables is ReadOnlyCollection<Block> ?
-				(ReadOnlyCollection<Syllable>)syllables :
-				new ReadOnlyCollection<Syllable>(syllables is List<Syllable> ?
-					(List<Syllable>)syllables :
-					syllables.ToList());
+			Syllables = syllables as List<Syllable> ?? syllables.ToList();
 		}
 
-		public ReadOnlyCollection<Syllable> Syllables { get; }
+		public List<Syllable> Syllables { get; set; }
 
 		public override string ToString()
 		{
@@ -81,8 +75,8 @@ namespace Konves.ChordPro
 			Chord = chord;
 			Text = text;
 		}
-		public Chord Chord { get; }
-		public string Text { get; }
+		public Chord Chord { get; set; }
+		public string Text { get; set; }
 
 		public override string ToString()
 		{
@@ -91,192 +85,169 @@ namespace Konves.ChordPro
 	}
 
 
-	public interface IDirective : ILine
+	public abstract class Directive : ILine
 	{
-		DirectiveType Type { get; }
 	}
 
-	public abstract class PreambleDirective : IDirective
-	{
-		public DirectiveType Type { get { return DirectiveType.Preamble; } }
-	}
+	public class NewSongDirective : Directive { }
 
-	public abstract class FormattingDirective : IDirective
-	{
-		public DirectiveType Type { get { return DirectiveType.Formatting; } }
-	}
-
-	public abstract class OutputDirective : IDirective
-	{
-		public DirectiveType Type { get { return DirectiveType.Output; } }
-	}
-
-	public class NewSongDirective : PreambleDirective { }
-
-	public sealed class TitleDirective : PreambleDirective
+	public sealed class TitleDirective : Directive
 	{
 		public TitleDirective(string text)
 		{
 			Text = text;
 		}
 
-		public string Text { get; }
+		public string Text { get; set; }
 	}
 
-	public sealed class SubtitleDirective : PreambleDirective
+	public sealed class SubtitleDirective : Directive
 	{
 		public SubtitleDirective(string text)
 		{
 			Text = text;
 		}
 
-		public string Text { get; }
+		public string Text { get; set; }
 	}
 
-	public sealed class CommentDirective : FormattingDirective
+	public sealed class CommentDirective : Directive
 	{
 		public CommentDirective(string text)
 		{
 			Text = text;
 		}
 
-		public string Text { get; }
+		public string Text { get; set; }
 	}
 
-	public sealed class CommentItalicDirective : FormattingDirective
+	public sealed class CommentItalicDirective : Directive
 	{
 		public CommentItalicDirective(string text)
 		{
 			Text = text;
 		}
 
-		public string Text { get; }
+		public string Text { get; set; }
 	}
 
-	public sealed class CommentBoxDirective : FormattingDirective
+	public sealed class CommentBoxDirective : Directive
 	{
 		public CommentBoxDirective(string text)
 		{
 			Text = text;
 		}
 
-		public string Text { get; }
+		public string Text { get; set; }
 	}
 
-	public sealed class StartOfChorusDirective : FormattingDirective { }
+	public sealed class StartOfChorusDirective : Directive { }
 
-	public sealed class EndOfChorusDirective : FormattingDirective { }
+	public sealed class EndOfChorusDirective : Directive { }
 
-	public sealed class StartOfTabDirective : FormattingDirective { }
+	public sealed class StartOfTabDirective : Directive { }
 
-	public sealed class EndOfTabDirective : FormattingDirective { }
+	public sealed class EndOfTabDirective : Directive { }
 
-	public sealed class DefineDirective : FormattingDirective
+	public sealed class DefineDirective : Directive
 	{
 		public DefineDirective(string definition)
 		{
 			Definition = definition;
 		}
 
-		public string Definition { get; }
+		public string Definition { get; set; }
 	}
 
-	public sealed class TextFontDirective : OutputDirective
+	public sealed class TextFontDirective : Directive
 	{
 		public TextFontDirective(string fontFamily)
 		{
 			FontFamily = fontFamily;
 		}
 
-		public string FontFamily { get; }
+		public string FontFamily { get; set; }
 	}
 
-	public sealed class TextSizeDirective : OutputDirective
+	public sealed class TextSizeDirective : Directive
 	{
 		public TextSizeDirective(int fontSize)
 		{
 			FontSize = fontSize;
 		}
 
-		public int FontSize { get; }
+		public int FontSize { get; set; }
 	}
 
-	public sealed class ChordFontDirective : OutputDirective
+	public sealed class ChordFontDirective : Directive
 	{
 		public ChordFontDirective(string fontFamily)
 		{
 			FontFamily = fontFamily;
 		}
 
-		public string FontFamily { get; }
+		public string FontFamily { get; set; }
 	}
 
-	public sealed class ChordSizeDirective : OutputDirective
+	public sealed class ChordSizeDirective : Directive
 	{
 		public ChordSizeDirective(int fontSize)
 		{
 			FontSize = fontSize;
 		}
 
-		public int FontSize { get; }
+		public int FontSize { get; set; }
 	}
 
-	public sealed class ChordColourDirective : OutputDirective
+	public sealed class ChordColourDirective : Directive
 	{
 		public ChordColourDirective(string colour)
 		{
 			Colour = colour;
 		}
 
-		public string Colour { get; }
+		public string Colour { get; set; }
 	}
 
-	public sealed class NoGridDirective : OutputDirective { }
+	public sealed class NoGridDirective : Directive { }
 
-	public sealed class GridDirective : OutputDirective { }
+	public sealed class GridDirective : Directive { }
 
-	public sealed class TitlesDirective : OutputDirective
+	public sealed class TitlesDirective : Directive
 	{
 		public TitlesDirective(Alignment flush)
 		{
 			Flush = flush;
 		}
 
-		public Alignment Flush { get; }
+		public Alignment Flush { get; set; }
 	}
 
-	public sealed class NewPageDirective : OutputDirective { }
+	public sealed class NewPageDirective : Directive { }
 
-	public sealed class NewPhysicalPageDirective : OutputDirective { }
+	public sealed class NewPhysicalPageDirective : Directive { }
 
-	public sealed class ColumnsDirective : OutputDirective
+	public sealed class ColumnsDirective : Directive
 	{
 		public ColumnsDirective(int number)
 		{
 			Number = number;
 		}
 
-		public int Number { get; }
+		public int Number { get; set; }
 	}
 
-	public sealed class PageTypeDirective : OutputDirective
+	public sealed class PageTypeDirective : Directive
 	{
 		public PageTypeDirective(PageType pageType)
 		{
 			PageType = pageType;
 		}
 
-		public PageType PageType { get; }
+		public PageType PageType { get; set; }
 	}
 
-	public sealed class ColumnBreakDirective : OutputDirective { }
-
-	public enum DirectiveType
-	{
-		Preamble,
-		Formatting,
-		Output
-	}
+	public sealed class ColumnBreakDirective : Directive { }
 
 	public enum Alignment
 	{
@@ -289,32 +260,4 @@ namespace Konves.ChordPro
 		A4,
 		Letter
 	}
-
-	//public enum DirectiveType
-	//{
-	//	NewSong,
-	//	Title,
-	//	Subtitle,
-	//	Comment,
-	//	CommentItalic,
-	//	CommentBox,
-	//	StartOfChorus,
-	//	EndOfChorus,
-	//	StartOfTab,
-	//	EndOfTab,
-	//	Define,
-	//	TextFont,
-	//	TextSize,
-	//	ChordFont,
-	//	ChordSize,
-	//	ChordColour,
-	//	NoGrid,
-	//	Grid,
-	//	Titles,
-	//	NewPage,
-	//	NewPhysicalPage,
-	//	Columns,
-	//	ColumnBreak,
-	//	PageType,
-	//}
 }

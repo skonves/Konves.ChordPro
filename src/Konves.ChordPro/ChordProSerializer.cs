@@ -29,7 +29,7 @@ namespace Konves.ChordPro
 			{
 				if (line is SongLineContext)
 				{
-					yield return new Line(Map(line as SongLineContext));
+					yield return new SongLine(Map(line as SongLineContext));
 				}
 				else if (line is DirectiveContext)
 				{
