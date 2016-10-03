@@ -5,12 +5,35 @@ using System.IO;
 using Antlr4.Runtime;
 using static Konves.ChordPro.ChordProParser;
 using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Konves.ChordPro.UnitTests
 {
 	[TestClass]
 	public class UnitTest1
 	{
+		[TestMethod]
+		public void TestXParser()
+		{
+			// Arrange
+			var assembly = Assembly.GetExecutingAssembly();
+			var resourceName = "Konves.ChordPro.UnitTests.Data.swing-low.cho";
+			List<ILine> result;
+
+			using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+			using (TextReader reader = new StreamReader(stream))
+			{
+				xParser sut = new xParser(reader);
+
+				// Act
+				result = sut.Parse().ToList();
+			}
+
+			// Assert
+			Assert.IsNotNull(result);
+		}
+
 		[TestMethod]
 		public void TestMethod1()
 		{

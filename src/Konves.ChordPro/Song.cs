@@ -18,6 +18,11 @@ namespace Konves.ChordPro
 
 	public sealed class SongLine : ILine
 	{
+		public SongLine()
+		{
+			Blocks = new List<Block>();
+		}
+
 		public SongLine(IEnumerable<Block> blocks)
 		{
 			Blocks = blocks as List<Block> ?? blocks.ToList();
@@ -28,6 +33,26 @@ namespace Konves.ChordPro
 		public override string ToString()
 		{
 			return string.Join("   ", Blocks?.Select(s => s.ToString()) ?? Enumerable.Empty<string>());
+		}
+	}
+
+	public sealed class TabLine : ILine
+	{
+		public TabLine()
+		{
+			Text = string.Empty;
+		}
+
+		public TabLine(string text)
+		{
+			Text = text;
+		}
+
+		public string Text { get; set; }
+
+		public override string ToString()
+		{
+			return Text;
 		}
 	}
 
@@ -151,11 +176,13 @@ namespace Konves.ChordPro
 
 	public sealed class DefineDirective : Directive
 	{
-		public DefineDirective(string definition)
+		public DefineDirective(string chord, string definition)
 		{
+			Chord = chord;
 			Definition = definition;
 		}
 
+		public string Chord { get; set; }
 		public string Definition { get; set; }
 	}
 

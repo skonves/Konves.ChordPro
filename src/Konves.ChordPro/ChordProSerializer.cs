@@ -119,7 +119,7 @@ namespace Konves.ChordPro
 					else if (directive.COMMENT_ITALIC() != null)
 						yield return new CommentItalicDirective(directive.TEXT().Symbol.Text);
 					else if (directive.DEFINE() != null)
-						yield return new DefineDirective(directive.TEXT().Symbol.Text);
+						yield return new DefineDirective(null, directive.TEXT().Symbol.Text);
 					else if (directive.END_OF_CHORUS() != null)
 						yield return new EndOfChorusDirective();
 					else if (directive.END_OF_TAB() != null)

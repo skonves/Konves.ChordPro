@@ -48,6 +48,7 @@
     <Compile Include="ChordProSerializer.cs" />
     <Compile Include="Generated\ChordProLexer.g.cs" />
     <Compile Include="Generated\ChordProParser.g.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Song.cs" />
   </ItemGroup>
