@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChordProSerializer.cs" />
+    <Compile Include="DirectiveHandlerUtility.cs" />
     <Compile Include="DirectiveParsers\BaseDirectiveParser.cs" />
     <Compile Include="DirectiveParsers\ChordColourParser.cs" />
     <Compile Include="Generated\ChordProLexer.g.cs" />

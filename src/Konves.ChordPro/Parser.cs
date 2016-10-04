@@ -15,29 +15,10 @@ namespace Konves.ChordPro
 		{
 		}
 
-		internal xParser(TextReader textReader, IEnumerable<DirectiveParser> customParsers)
+		internal xParser(TextReader textReader, IEnumerable<DirectiveHandler> customHandlers)
 		{
 			_textReader = textReader;
-			_directiveParsers = GetDirectiveParserDictionary(customParsers);
-		}
-
-		internal static IReadOnlyDictionary<string, DirectiveParser> GetDirectiveParserDictionary(IEnumerable<DirectiveParser> customParsers)
-		{
-			Dictionary<string, DirectiveParser> index = new Dictionary<string, DirectiveParser>();
-
-			foreach (DirectiveParser parser in _defaultDirectiveParsers ?? Enumerable.Empty<DirectiveParser>())
-			{
-				index[parser.LongName] = parser;
-				index[parser.ShortName] = parser;
-			}
-
-			foreach (DirectiveParser parser in customParsers ?? Enumerable.Empty<DirectiveParser>())
-			{
-				index[parser.LongName] = parser;
-				index[parser.ShortName] = parser;
-			}
-
-			return index;
+			_directiveParsers = DirectiveHandlerUtility.GetHandlersDictionaryByName(customHandlers);
 		}
 
 		internal IEnumerable<ILine> Parse()
@@ -78,7 +59,7 @@ namespace Konves.ChordPro
 		internal Directive ParseDirective(string line)
 		{
 			DirectiveComponents components;
-			DirectiveParser parser;
+			DirectiveHandler parser;
 			Directive directive;
 			if (DirectiveComponents.TryParse(line, out components) && _directiveParsers.TryGetValue(components.Key, out parser) && parser.TryParse(components, out directive))
 			{
@@ -265,35 +246,8 @@ namespace Konves.ChordPro
 		}
 
 		readonly TextReader _textReader;
-		readonly IReadOnlyDictionary<string, DirectiveParser> _directiveParsers;
+		readonly IReadOnlyDictionary<string, DirectiveHandler> _directiveParsers;
 		internal bool _isInTab = false;
 		int _lineNumber = 0;
-
-		static readonly IReadOnlyCollection<DirectiveParser> _defaultDirectiveParsers = new DirectiveParser[] {
-			new ChordColourParser(),
-			new ChordFontParser(),
-			new ChordSizeParser(),
-			new ColumnsParser(),
-			new ColumnBreakParser(),
-			new CommentParser(),
-			new CommentBoxParser(),
-			new CommentItalicParser(),
-			new DefineParser(),
-			new EndOfChorusParser(),
-			new EndOfTabParser(),
-			new GridParser(),
-			new NewPageParser(),
-			new NewPhysicalPageParser(),
-			new NewSongParser(),
-			new NoGridParser(),
-			new PageTypeParser(),
-			new StartOfChorusParser(),
-			new StartOfTabParser(),
-			new SubtitleParser(),
-			new TextFontParser(),
-			new TextSizeParser(),
-			new TitleParser(),
-			new TitlesParser()
-		};
 	}
 }

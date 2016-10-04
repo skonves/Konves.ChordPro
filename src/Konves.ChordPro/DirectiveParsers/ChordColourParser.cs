@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Konves.ChordPro.DirectiveParsers
 {
-	public sealed class ChordColourParser : DirectiveParser
+	public sealed class ChordColourHandler : DirectiveHandler<ChordColourDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -14,17 +14,27 @@ namespace Konves.ChordPro.DirectiveParsers
 			return true;
 		}
 
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as ChordColourDirective)?.Colour;
+		}
+
 		public override string LongName { get { return "chordcolour"; } }
 		public override ComponentPresence SubKey { get { return ComponentPresence.NotAllowed; } }
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class ChordFontParser : DirectiveParser
+	public sealed class ChordFontHandler : DirectiveHandler<ChordFontDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new ChordFontDirective(components.Value);
 			return true;
+		}
+
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as ChordFontDirective)?.FontFamily;
 		}
 
 		public override string LongName { get { return "chordfont"; } }
@@ -33,7 +43,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class ChordSizeParser : DirectiveParser
+	public sealed class ChordSizeHandler : DirectiveHandler<ChordSizeDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -46,7 +56,11 @@ namespace Konves.ChordPro.DirectiveParsers
 
 			directive = null;
 			return false;
+		}
 
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as ChordSizeDirective)?.FontSize.ToString();
 		}
 
 		public override string LongName { get { return "chordsize"; } }
@@ -55,7 +69,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class ColumnsParser : DirectiveParser
+	public sealed class ColumnsHandler : DirectiveHandler<ColumnsDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -70,13 +84,18 @@ namespace Konves.ChordPro.DirectiveParsers
 			return false;
 		}
 
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as ColumnsDirective)?.Number.ToString();
+		}
+
 		public override string LongName { get { return "columns"; } }
 		public override string ShortName { get { return "col"; } }
 		public override ComponentPresence SubKey { get { return ComponentPresence.NotAllowed; } }
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class ColumnBreakParser : DirectiveParser
+	public sealed class ColumnBreakHandler : DirectiveHandler<ColumnBreakDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -90,12 +109,17 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.NotAllowed; } }
 	}
 
-	public sealed class CommentParser : DirectiveParser
+	public sealed class CommentHandler : DirectiveHandler<CommentDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new CommentDirective(components.Value);
 			return true;
+		}
+
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as CommentDirective)?.Text;
 		}
 
 		public override string LongName { get { return "comment"; } }
@@ -104,12 +128,17 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class CommentBoxParser : DirectiveParser
+	public sealed class CommentBoxHandler : DirectiveHandler<CommentBoxDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new CommentBoxDirective(components.Value);
 			return true;
+		}
+
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as CommentBoxDirective)?.Text;
 		}
 
 		public override string LongName { get { return "comment_box"; } }
@@ -118,12 +147,17 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class CommentItalicParser : DirectiveParser
+	public sealed class CommentItalicHandler : DirectiveHandler<CommentItalicDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new CommentItalicDirective(components.Value);
 			return true;
+		}
+
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as CommentItalicDirective)?.Text;
 		}
 
 		public override string LongName { get { return "comment_italic"; } }
@@ -132,7 +166,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class DefineParser : DirectiveParser
+	public sealed class DefineHandler : DirectiveHandler<DefineDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -140,12 +174,22 @@ namespace Konves.ChordPro.DirectiveParsers
 			return true;
 		}
 
+		protected override string GetSubKey(Directive directive)
+		{
+			return (directive as DefineDirective)?.Chord;
+		}
+
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as DefineDirective)?.Definition;
+		}
+
 		public override string LongName { get { return "define"; } }
 		public override ComponentPresence SubKey { get { return ComponentPresence.Required; } }
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class EndOfChorusParser : DirectiveParser
+	public sealed class EndOfChorusHandler : DirectiveHandler<EndOfChorusDirective> //////////////////////////////////////
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -159,7 +203,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.NotAllowed; } }
 	}
 
-	public sealed class EndOfTabParser : DirectiveParser
+	public sealed class EndOfTabHandler : DirectiveHandler<EndOfTabDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -173,7 +217,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.NotAllowed; } }
 	}
 
-	public sealed class GridParser : DirectiveParser
+	public sealed class GridHandler : DirectiveHandler<GridDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -187,7 +231,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.NotAllowed; } }
 	}
 
-	public sealed class NewPageParser : DirectiveParser
+	public sealed class NewPageHandler : DirectiveHandler<NewPageDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -201,7 +245,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.NotAllowed; } }
 	}
 
-	public sealed class NewPhysicalPageParser : DirectiveParser
+	public sealed class NewPhysicalPageHandler : DirectiveHandler<NewPhysicalPageDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -215,7 +259,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.NotAllowed; } }
 	}
 
-	public sealed class NewSongParser : DirectiveParser
+	public sealed class NewSongHandler : DirectiveHandler<NewSongDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -229,7 +273,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.NotAllowed; } }
 	}
 
-	public sealed class NoGridParser : DirectiveParser
+	public sealed class NoGridHandler : DirectiveHandler<NoGridDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -243,7 +287,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.NotAllowed; } }
 	}
 
-	public sealed class PageTypeParser : DirectiveParser
+	public sealed class PageTypeHandler : DirectiveHandler<PageTypeDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -261,12 +305,17 @@ namespace Konves.ChordPro.DirectiveParsers
 			}
 		}
 
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as PageTypeDirective)?.PageType.ToString().ToLower();
+		}
+
 		public override string LongName { get { return "pagetype"; } }
 		public override ComponentPresence SubKey { get { return ComponentPresence.NotAllowed; } }
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class StartOfChorusParser : DirectiveParser
+	public sealed class StartOfChorusHandler : DirectiveHandler<StartOfChorusDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -280,7 +329,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.NotAllowed; } }
 	}
 
-	public sealed class StartOfTabParser : DirectiveParser
+	public sealed class StartOfTabHandler : DirectiveHandler<StartOfTabDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -294,12 +343,17 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.NotAllowed; } }
 	}
 
-	public sealed class SubtitleParser : DirectiveParser
+	public sealed class SubtitleHandler : DirectiveHandler<SubtitleDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new SubtitleDirective(components.Value);
 			return true;
+		}
+
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as SubtitleDirective)?.Text;
 		}
 
 		public override string LongName { get { return "subtitle"; } }
@@ -308,12 +362,17 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class TextFontParser : DirectiveParser
+	public sealed class TextFontHandler : DirectiveHandler<TextFontDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new TextFontDirective(components.Value);
 			return true;
+		}
+
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as TextFontDirective)?.FontFamily;
 		}
 
 		public override string LongName { get { return "textfont"; } }
@@ -322,7 +381,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class TextSizeParser : DirectiveParser
+	public sealed class TextSizeHandler : DirectiveHandler<TextSizeDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -337,18 +396,28 @@ namespace Konves.ChordPro.DirectiveParsers
 			return false;
 		}
 
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as TextSizeDirective)?.FontSize.ToString();
+		}
+
 		public override string LongName { get { return "textsize"; } }
 		public override string ShortName { get { return "ts"; } }
 		public override ComponentPresence SubKey { get { return ComponentPresence.NotAllowed; } }
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class TitleParser : DirectiveParser
+	public sealed class TitleHandler : DirectiveHandler<TitleDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new TitleDirective(components.Value);
 			return true;
+		}
+
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as TitleDirective)?.Text;
 		}
 
 		public override string LongName { get { return "title"; } }
@@ -357,7 +426,7 @@ namespace Konves.ChordPro.DirectiveParsers
 		public override ComponentPresence Value { get { return ComponentPresence.Required; } }
 	}
 
-	public sealed class TitlesParser : DirectiveParser
+	public sealed class TitlesHandler : DirectiveHandler<TitlesDirective>
 	{
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
@@ -373,6 +442,11 @@ namespace Konves.ChordPro.DirectiveParsers
 					directive = null;
 					return false;
 			}
+		}
+
+		protected override string GetValue(Directive directive)
+		{
+			return (directive as TitlesDirective)?.Flush.ToString().ToLower();
 		}
 
 		public override string LongName { get { return "titles"; } }

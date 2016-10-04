@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace Konves.ChordPro.DirectiveParsers
 {
-	public abstract class DirectiveParser
+	public abstract class DirectiveHandler<TDirective> : DirectiveHandler where TDirective : Directive
 	{
-		public virtual bool TryParse(DirectiveComponents components, out Directive directive)
+		public override Type DirectiveType { get { return typeof(TDirective); } }
+	}
+
+	public abstract class DirectiveHandler
+	{
+		public bool TryParse(DirectiveComponents components, out Directive directive)
 		{
 			directive = null;
 
@@ -37,10 +42,33 @@ namespace Konves.ChordPro.DirectiveParsers
 
 		protected abstract bool TryCreate(DirectiveComponents components, out Directive directive);
 
+		protected virtual string GetValue(Directive directive)
+		{
+			return null;
+		}
+
+		protected virtual string GetSubKey(Directive directive)
+		{
+			return null;
+		}
+
+		public string GetString(Directive directive, bool shorten = false)
+		{
+			string key = shorten ? ShortName : LongName;
+			string subkey = GetSubKey(directive);
+			string value = GetValue(directive);
+
+			string subkeyString = SubKey != ComponentPresence.NotAllowed && !string.IsNullOrWhiteSpace(subkey) ? " " + subkey : null;
+			string valueString = Value != ComponentPresence.NotAllowed && !string.IsNullOrWhiteSpace(value) ? ": " + value : null;
+
+			return $"{{{key}{subkeyString}{valueString}}}";
+		}
+
 		public abstract ComponentPresence SubKey { get; }
 		public abstract ComponentPresence Value { get; }
 		public abstract string LongName { get; }
 		public virtual string ShortName { get { return LongName; } }
+		public abstract Type DirectiveType { get; }
 	}
 
 	public enum ComponentPresence
