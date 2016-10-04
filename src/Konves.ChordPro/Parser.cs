@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Konves.ChordPro.DirectiveParsers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,9 +11,33 @@ namespace Konves.ChordPro
 {
 	internal sealed class xParser
 	{
-		internal xParser(TextReader textReader)
+		internal xParser(TextReader textReader) : this(textReader, null)
+		{
+		}
+
+		internal xParser(TextReader textReader, IEnumerable<DirectiveParser> customParsers)
 		{
 			_textReader = textReader;
+			_directiveParsers = GetDirectiveParserDictionary(customParsers);
+		}
+
+		internal static IReadOnlyDictionary<string, DirectiveParser> GetDirectiveParserDictionary(IEnumerable<DirectiveParser> customParsers)
+		{
+			Dictionary<string, DirectiveParser> index = new Dictionary<string, DirectiveParser>();
+
+			foreach (DirectiveParser parser in _defaultDirectiveParsers ?? Enumerable.Empty<DirectiveParser>())
+			{
+				index[parser.LongName] = parser;
+				index[parser.ShortName] = parser;
+			}
+
+			foreach (DirectiveParser parser in customParsers ?? Enumerable.Empty<DirectiveParser>())
+			{
+				index[parser.LongName] = parser;
+				index[parser.ShortName] = parser;
+			}
+
+			return index;
 		}
 
 		internal IEnumerable<ILine> Parse()
@@ -52,183 +77,22 @@ namespace Konves.ChordPro
 
 		internal Directive ParseDirective(string line)
 		{
-			var parts = GetDirectiveParts(line);
-
-			switch (parts.Key)
+			DirectiveComponents components;
+			DirectiveParser parser;
+			Directive directive;
+			if (DirectiveComponents.TryParse(line, out components) && _directiveParsers.TryGetValue(components.Key, out parser) && parser.TryParse(components, out directive))
 			{
-				case "chordcolour":
-					{
-						if (string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Expected directive value at line {_lineNumber}.");
-						return new ChordColourDirective(parts.Value);
-					}
-				case "chordfont":
-				case "cf":
-					{
-						if (string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Expected directive value at line {_lineNumber}.");
-						return new ChordFontDirective(parts.Value);
-					}
-				case "chordsize":
-				case "cs":
-					{
-						int value;
-						if (int.TryParse(parts.Value, out value))
-							return new ChordSizeDirective(value);
-						throw new FormatException($"Expected integer directive value at line {_lineNumber}. Found '{parts.Value}'");
-					}
-				case "columns":
-				case "col":
-					{
-						int value;
-						if (int.TryParse(parts.Value, out value))
-							return new ColumnsDirective(value);
-						throw new FormatException($"Expected integer directive value at line {_lineNumber}. Found '{parts.Value}'");
-					}
-				case "column_break":
-				case "colb":
-					{
-						if (!string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Unexpected directive value at line {_lineNumber}.");
-						return new ColumnBreakDirective();
-					}
-				case "comment":
-				case "c":
-					{
-						if (string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Expected directive value at line {_lineNumber}.");
-						return new CommentDirective(parts.Value);
-					}
-				case "comment_box":
-				case "cb":
-					{
-						if (string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Expected directive value at line {_lineNumber}.");
-						return new CommentBoxDirective(parts.Value);
-					}
-				case "comment_italic":
-				case "ci":
-					{
-						if (string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Expected directive value at line {_lineNumber}.");
-						return new CommentItalicDirective(parts.Value);
-					}
-				case "define":
-					{
-						if (string.IsNullOrWhiteSpace(parts.SubKey))
-							throw new FormatException($"Expected chord name at line {_lineNumber}.");
-						if (string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Expected directive value at line {_lineNumber}.");
-						return new DefineDirective(parts.SubKey, parts.Value);
-					}
-				case "end_of_chorus":
-				case "eoc":
-					{
-						if (!string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Unexpected directive value at line {_lineNumber}.");
-						return new EndOfChorusDirective();
-					}
-				case "end_of_tab":
-				case "eot":
-					{
-						if (!string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Unexpected directive value at line {_lineNumber}.");
-						_isInTab = false;
-						return new EndOfTabDirective();
-					}
-				case "grid":
-				case "g":
-					{
-						if (!string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Unexpected directive value at line {_lineNumber}.");
-						return new GridDirective();
-					}
-				case "new_page":
-				case "np":
-					{
-						if (!string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Unexpected directive value at line {_lineNumber}.");
-						return new NewPageDirective();
-					}
-				case "new_physical_page":
-				case "npp":
-					{
-						if (!string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Unexpected directive value at line {_lineNumber}.");
-						return new NewPhysicalPageDirective();
-					}
-				case "new_song":
-				case "ns":
-					{
-						if (!string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Unexpected directive value at line {_lineNumber}.");
-						return new NewSongDirective();
-					}
-				case "no_grid":
-				case "ng":
-					{
-						if (!string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Unexpected directive value at line {_lineNumber}.");
-						return new NoGridDirective();
-					}
-				case "pagetype":
-					{
-						if (string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Expected directive value at line {_lineNumber}.");
-						return new PageTypeDirective(GetPageType(parts.Value));
-					}
-				case "start_of_chorus":
-				case "soc":
-					{
-						if (!string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Unexpected directive value at line {_lineNumber}.");
-						return new StartOfChorusDirective();
-					}
-				case "start_of_tab":
-				case "sot":
-					{
-						if (!string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Unexpected directive value at line {_lineNumber}.");
-						_isInTab = true;
-						return new StartOfTabDirective();
-					}
-				case "subtitle":
-				case "st":
-					{
-						if (string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Expected directive value at line {_lineNumber}.");
-						return new SubtitleDirective(parts.Value);
-					}
-				case "textfont":
-				case "tf":
-					{
-						if (string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Expected directive value at line {_lineNumber}.");
-						return new TextFontDirective(parts.Value);
-					}
-				case "textsize":
-				case "ts":
-					{
-						int value;
-						if (int.TryParse(parts.Value, out value))
-							return new TextSizeDirective(value);
-						throw new FormatException($"Expected integer directive value at line {_lineNumber}. Found '{parts.Value}'");
-					}
-				case "title":
-				case "t":
-					{
-						if (string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Expected directive value at line {_lineNumber}.");
-						return new TitleDirective(parts.Value);
-					}
-				case "titles":
-					{
-						if (string.IsNullOrWhiteSpace(parts.Value))
-							throw new FormatException($"Expected directive value at line {_lineNumber}.");
-						return new TitlesDirective(GetAlignment(parts.Value));
-					}
-				default:
-					throw new FormatException($"Unknown directive '{parts.Key}' at line {_lineNumber}.");
+				if (directive is StartOfTabDirective)
+					_isInTab = true;
+
+				if (directive is EndOfTabDirective)
+					_isInTab = false;
+
+				return directive;
+			}
+			else
+			{
+				throw new FormatException($"Invalid directive at line {_lineNumber}.");
 			}
 		}
 
@@ -365,18 +229,6 @@ namespace Konves.ChordPro
 			return LineType.Whitespace;
 		}
 
-		internal static DirectiveParts GetDirectiveParts(string s)
-		{
-			Match match = _directiveRegex.Match(s);
-
-			return new DirectiveParts
-			{
-				Key = match.Groups["key"]?.Value.Trim(),
-				SubKey = match.Groups["subkey"]?.Value.Trim(),
-				Value = match.Groups["value"]?.Value.Trim(),
-			};
-		}
-
 		internal PageType GetPageType(string s)
 		{
 			switch (s)
@@ -412,9 +264,36 @@ namespace Konves.ChordPro
 			public string Value { get; set; }
 		}
 
-		static readonly Regex _directiveRegex = new Regex(@"^\s*{\s*(?<key>[^\s:}]+)(?:\s+(?<subkey>[^:}]*))?(?:\:(?<value>[^}]+))?}\s*", RegexOptions.Compiled);
 		readonly TextReader _textReader;
+		readonly IReadOnlyDictionary<string, DirectiveParser> _directiveParsers;
 		internal bool _isInTab = false;
 		int _lineNumber = 0;
+
+		static readonly IReadOnlyCollection<DirectiveParser> _defaultDirectiveParsers = new DirectiveParser[] {
+			new ChordColourParser(),
+			new ChordFontParser(),
+			new ChordSizeParser(),
+			new ColumnsParser(),
+			new ColumnBreakParser(),
+			new CommentParser(),
+			new CommentBoxParser(),
+			new CommentItalicParser(),
+			new DefineParser(),
+			new EndOfChorusParser(),
+			new EndOfTabParser(),
+			new GridParser(),
+			new NewPageParser(),
+			new NewPhysicalPageParser(),
+			new NewSongParser(),
+			new NoGridParser(),
+			new PageTypeParser(),
+			new StartOfChorusParser(),
+			new StartOfTabParser(),
+			new SubtitleParser(),
+			new TextFontParser(),
+			new TextSizeParser(),
+			new TitleParser(),
+			new TitlesParser()
+		};
 	}
 }

@@ -33,33 +33,6 @@ namespace Konves.ChordPro.UnitTests
 		}
 
 		[TestMethod]
-		public void TestGetDirectiveParts()
-		{
-			DoTestGetDirectiveParts("{asdf:qwerty}", "asdf", string.Empty, "qwerty");
-			DoTestGetDirectiveParts("  {  asdf  :  qwerty  }  ", "asdf", string.Empty, "qwerty");
-			DoTestGetDirectiveParts("{asdf abc:qwerty}", "asdf", "abc", "qwerty");
-			DoTestGetDirectiveParts("  {  asdf   abc  :  qwerty  asdf  }  ", "asdf", "abc", "qwerty  asdf");
-			DoTestGetDirectiveParts("{asdf:qwerty}#Comment", "asdf", string.Empty, "qwerty");
-			DoTestGetDirectiveParts("  {  asdf  :  qwerty  }  # Comment", "asdf", string.Empty, "qwerty");
-			DoTestGetDirectiveParts("{asdf abc:qwerty}# Comment", "asdf", "abc", "qwerty");
-			DoTestGetDirectiveParts("  {  asdf   abc  :  qwerty  asdf  }  # Comment", "asdf", "abc", "qwerty  asdf");
-		}
-
-		private void DoTestGetDirectiveParts(string input, string expectedKey, string expectedSubKey, string expectedValue)
-		{
-			// Arrange
-
-			// Act
-			xParser.DirectiveParts result = xParser.GetDirectiveParts(input);
-
-			// Assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(expectedKey, result.Key);
-			Assert.AreEqual(expectedSubKey, result.SubKey);
-			Assert.AreEqual(expectedValue, result.Value);
-		}
-
-		[TestMethod]
 		public void SplitIntoBlocksTest()
 		{
 			DoSplitIntoBlocksTest("asdf [X]asdf asdf", "asdf", "[X]asdf", "asdf");
