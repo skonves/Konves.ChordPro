@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Konves.ChordPro.Directives;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Konves.ChordPro.DirectiveParsers
+namespace Konves.ChordPro.DirectiveHandlers
 {
 	public abstract class DirectiveHandler<TDirective> : DirectiveHandler where TDirective : Directive
 	{

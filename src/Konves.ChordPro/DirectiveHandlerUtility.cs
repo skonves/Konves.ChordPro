@@ -1,4 +1,4 @@
-﻿using Konves.ChordPro.DirectiveParsers;
+﻿using Konves.ChordPro.DirectiveHandlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

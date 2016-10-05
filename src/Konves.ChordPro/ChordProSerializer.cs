@@ -1,4 +1,5 @@
-﻿using Konves.ChordPro.DirectiveParsers;
+﻿using Konves.ChordPro.DirectiveHandlers;
+using Konves.ChordPro.Directives;
 using System;
 using System.Collections.Generic;
 using System.IO;
