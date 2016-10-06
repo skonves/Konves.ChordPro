@@ -55,6 +55,31 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DirectiveComponentsTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\ChordColourHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\ChordFontHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\ChordSizeHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\ColumnBreakHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\ColumnsHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\CommentBoxHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\CommentHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\CommentItalicHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\DefineHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\EndOfChorusHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\EndOfTabHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\GridHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\KeyOnlyBaseTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\NewPageHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\NewPhysicalPageHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\NewSongHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\NoGridHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\PageTypeHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\StartOfChorusHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\StartOfTabHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\SubtitleHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\TextFontHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\TextSizeHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\TitleHandlerTestFixture.cs" />
+    <Compile Include="DirectiveHandlers\TitlesHandlerTestFixture.cs" />
     <Compile Include="ParserTestFixture.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

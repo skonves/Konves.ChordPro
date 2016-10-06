@@ -11,21 +11,21 @@ namespace Konves.ChordPro.UnitTests
 	public class DirectiveComponentsTestFixture
 	{
 		[TestMethod]
-		public void TestGetDirectiveParts()
+		public void TryParseTest()
 		{
-			DoTestGetDirectiveParts("{asdf:qwerty}", true, "asdf", string.Empty, "qwerty");
-			DoTestGetDirectiveParts("  {  asdf  :  qwerty  }  ", true, "asdf", string.Empty, "qwerty");
-			DoTestGetDirectiveParts("{asdf abc:qwerty}", true, "asdf", "abc", "qwerty");
-			DoTestGetDirectiveParts("  {  asdf   abc  :  qwerty  asdf  }  ", true, "asdf", "abc", "qwerty  asdf");
-			DoTestGetDirectiveParts("{asdf:qwerty}#Comment", true, "asdf", string.Empty, "qwerty");
-			DoTestGetDirectiveParts("  {  asdf  :  qwerty  }  # Comment", true, "asdf", string.Empty, "qwerty");
-			DoTestGetDirectiveParts("{asdf abc:qwerty}# Comment", true, "asdf", "abc", "qwerty");
-			DoTestGetDirectiveParts("  {  asdf   abc  :  qwerty  asdf  }  # Comment", true, "asdf", "abc", "qwerty  asdf");
+			DoTryParseTest("{asdf:qwerty}", true, "asdf", string.Empty, "qwerty");
+			DoTryParseTest("  {  asdf  :  qwerty  }  ", true, "asdf", string.Empty, "qwerty");
+			DoTryParseTest("{asdf abc:qwerty}", true, "asdf", "abc", "qwerty");
+			DoTryParseTest("  {  asdf   abc  :  qwerty  asdf  }  ", true, "asdf", "abc", "qwerty  asdf");
+			DoTryParseTest("{asdf:qwerty}#Comment", true, "asdf", string.Empty, "qwerty");
+			DoTryParseTest("  {  asdf  :  qwerty  }  # Comment", true, "asdf", string.Empty, "qwerty");
+			DoTryParseTest("{asdf abc:qwerty}# Comment", true, "asdf", "abc", "qwerty");
+			DoTryParseTest("  {  asdf   abc  :  qwerty  asdf  }  # Comment", true, "asdf", "abc", "qwerty  asdf");
 
-			DoTestGetDirectiveParts("{}", false, null, null, null);
+			DoTryParseTest("{}", false, null, null, null);
 		}
 
-		private void DoTestGetDirectiveParts(string input, bool expectedResult, string expectedKey, string expectedSubKey, string expectedValue)
+		private void DoTryParseTest(string input, bool expectedResult, string expectedKey, string expectedSubKey, string expectedValue)
 		{
 			// Arrange
 			DirectiveComponents components;
