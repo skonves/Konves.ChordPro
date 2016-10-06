@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class TitleHandler : DirectiveHandler<TitleDirective>
 	{
+		private TitleHandler() { }
+
+		public static TitleHandler Instance { get; } = new TitleHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new TitleDirective(components.Value);

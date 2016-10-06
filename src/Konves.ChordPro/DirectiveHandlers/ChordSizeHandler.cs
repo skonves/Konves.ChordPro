@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class ChordSizeHandler : DirectiveHandler<ChordSizeDirective>
 	{
+		private ChordSizeHandler() { }
+
+		public static ChordSizeHandler Instance { get; } = new ChordSizeHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			int value;

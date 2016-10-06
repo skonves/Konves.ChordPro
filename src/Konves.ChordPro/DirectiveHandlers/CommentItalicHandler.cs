@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class CommentItalicHandler : DirectiveHandler<CommentItalicDirective>
 	{
+		private CommentItalicHandler() { }
+
+		public static CommentItalicHandler Instance { get; } = new CommentItalicHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new CommentItalicDirective(components.Value);

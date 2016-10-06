@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class StartOfChorusHandler : DirectiveHandler<StartOfChorusDirective>
 	{
+		private StartOfChorusHandler() { }
+
+		public static StartOfChorusHandler Instance { get; } = new StartOfChorusHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new StartOfChorusDirective();

@@ -21,19 +21,15 @@ namespace Konves.ChordPro.DirectiveHandlers
 			if (components.Key == LongName || components.Key == ShortName)
 			{
 				if (Value == ComponentPresence.Required && string.IsNullOrWhiteSpace(components.Value))
-					// throw new FormatException($"Value required for '{components.Key}' directive.");
 					return false;
 
 				if (Value == ComponentPresence.NotAllowed && !string.IsNullOrWhiteSpace(components.Value))
-					// throw new FormatException($"Value not allowed for '{components.Key}' directive.");
 					return false;
 
 				if (SubKey == ComponentPresence.Required && string.IsNullOrWhiteSpace(components.SubKey))
-					// throw new FormatException($"Sub-key required for '{components.Key}' directive.");
 					return false;
 
 				if (SubKey == ComponentPresence.NotAllowed && !string.IsNullOrWhiteSpace(components.SubKey))
-					// throw new FormatException($"Sub-key not allowed for '{components.Key}' directive.");
 					return false;
 
 				return TryCreate(components, out directive);

@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class NoGridHandler : DirectiveHandler<NoGridDirective>
 	{
+		private NoGridHandler() { }
+
+		public static NoGridHandler Instance { get; } = new NoGridHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new NoGridDirective();

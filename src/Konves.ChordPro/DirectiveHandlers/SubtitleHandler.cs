@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class SubtitleHandler : DirectiveHandler<SubtitleDirective>
 	{
+		private SubtitleHandler() { }
+
+		public static SubtitleHandler Instance { get; } = new SubtitleHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new SubtitleDirective(components.Value);

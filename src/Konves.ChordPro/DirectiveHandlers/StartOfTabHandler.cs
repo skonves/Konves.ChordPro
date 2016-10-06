@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class StartOfTabHandler : DirectiveHandler<StartOfTabDirective>
 	{
+		private StartOfTabHandler() { }
+
+		public static StartOfTabHandler Instance { get; } = new StartOfTabHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new StartOfTabDirective();

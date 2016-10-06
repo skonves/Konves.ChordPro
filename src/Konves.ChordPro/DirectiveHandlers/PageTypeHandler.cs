@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class PageTypeHandler : DirectiveHandler<PageTypeDirective>
 	{
+		private PageTypeHandler() { }
+
+		public static PageTypeHandler Instance { get; } = new PageTypeHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			switch (components.Value.ToLower())

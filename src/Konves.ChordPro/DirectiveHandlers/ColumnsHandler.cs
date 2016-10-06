@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class ColumnsHandler : DirectiveHandler<ColumnsDirective>
 	{
+		private ColumnsHandler() { }
+
+		public static ColumnsHandler Instance { get; } = new ColumnsHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			int value;

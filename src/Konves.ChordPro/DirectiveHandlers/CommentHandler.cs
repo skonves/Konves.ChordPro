@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class CommentHandler : DirectiveHandler<CommentDirective>
 	{
+		private CommentHandler() { }
+
+		public static CommentHandler Instance { get; } = new CommentHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new CommentDirective(components.Value);

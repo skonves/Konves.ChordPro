@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class NewSongHandler : DirectiveHandler<NewSongDirective>
 	{
+		private NewSongHandler() { }
+
+		public static NewSongHandler Instance { get; } = new NewSongHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new NewSongDirective();

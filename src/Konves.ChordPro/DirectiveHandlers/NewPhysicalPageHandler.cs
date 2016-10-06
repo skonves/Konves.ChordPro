@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class NewPhysicalPageHandler : DirectiveHandler<NewPhysicalPageDirective>
 	{
+		private NewPhysicalPageHandler() { }
+
+		public static NewPhysicalPageHandler Instance { get; } = new NewPhysicalPageHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new NewPhysicalPageDirective();

@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class GridHandler : DirectiveHandler<GridDirective>
 	{
+		private GridHandler() { }
+
+		public static GridHandler Instance { get; } = new GridHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new GridDirective();

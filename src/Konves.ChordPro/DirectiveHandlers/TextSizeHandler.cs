@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class TextSizeHandler : DirectiveHandler<TextSizeDirective>
 	{
+		private TextSizeHandler() { }
+
+		public static TextSizeHandler Instance { get; } = new TextSizeHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			int value;

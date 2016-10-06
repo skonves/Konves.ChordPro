@@ -4,6 +4,10 @@ namespace Konves.ChordPro.DirectiveHandlers
 {
 	public sealed class TextFontHandler : DirectiveHandler<TextFontDirective>
 	{
+		private TextFontHandler() { }
+
+		public static TextFontHandler Instance { get; } = new TextFontHandler();
+
 		protected override bool TryCreate(DirectiveComponents components, out Directive directive)
 		{
 			directive = new TextFontDirective(components.Value);
