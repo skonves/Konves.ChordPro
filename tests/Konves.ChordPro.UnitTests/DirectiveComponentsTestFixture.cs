@@ -23,6 +23,9 @@ namespace Konves.ChordPro.UnitTests
 			DoTryParseTest("  {  asdf   abc  :  qwerty  asdf  }  # Comment", true, "asdf", "abc", "qwerty  asdf");
 
 			DoTryParseTest("{}", false, null, null, null);
+			DoTryParseTest("asdf", false, null, null, null);
+			DoTryParseTest("{:asdf}", false, null, null, null);
+			// DoTryParseTest("{asdf asdf asdf:asdf}", false, null, null, null);
 		}
 
 		private void DoTryParseTest(string input, bool expectedResult, string expectedKey, string expectedSubKey, string expectedValue)
