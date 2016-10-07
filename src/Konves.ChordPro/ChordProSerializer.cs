@@ -17,7 +17,7 @@ namespace Konves.ChordPro
 		{
 			using (StreamReader reader = new StreamReader(stream))
 			{
-				xParser parser = new xParser(reader);
+				Parser parser = new Parser(reader);
 				return new Document(parser.Parse());
 			}
 		}

@@ -22,7 +22,7 @@ namespace Konves.ChordPro.UnitTests
 			using (Stream stream = assembly.GetManifestResourceStream(resourceName))
 			using (TextReader reader = new StreamReader(stream))
 			{
-				xParser sut = new xParser(reader);
+				Parser sut = new Parser(reader);
 
 				// Act
 				result = sut.Parse().ToList();

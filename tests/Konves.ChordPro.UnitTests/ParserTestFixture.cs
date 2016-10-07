@@ -12,22 +12,22 @@ namespace Konves.ChordPro.UnitTests
 		[TestMethod]
 		public void GetLineTypeTest()
 		{
-			DoGetLineTypeTest("{directive}", xParser.LineType.Directive);
-			DoGetLineTypeTest("    {directive}", xParser.LineType.Directive);
-			DoGetLineTypeTest("# Comment", xParser.LineType.Comment);
-			DoGetLineTypeTest("    # Comment", xParser.LineType.Comment);
-			DoGetLineTypeTest("song line", xParser.LineType.Text);
-			DoGetLineTypeTest("    song line", xParser.LineType.Text);
-			DoGetLineTypeTest("", xParser.LineType.Whitespace);
-			DoGetLineTypeTest("    ", xParser.LineType.Whitespace);
+			DoGetLineTypeTest("{directive}", Parser.LineType.Directive);
+			DoGetLineTypeTest("    {directive}", Parser.LineType.Directive);
+			DoGetLineTypeTest("# Comment", Parser.LineType.Comment);
+			DoGetLineTypeTest("    # Comment", Parser.LineType.Comment);
+			DoGetLineTypeTest("song line", Parser.LineType.Text);
+			DoGetLineTypeTest("    song line", Parser.LineType.Text);
+			DoGetLineTypeTest("", Parser.LineType.Whitespace);
+			DoGetLineTypeTest("    ", Parser.LineType.Whitespace);
 		}
 
-		private void DoGetLineTypeTest(string line, xParser.LineType expected)
+		private void DoGetLineTypeTest(string line, Parser.LineType expected)
 		{
 			// Arrange
 
 			// Act
-			xParser.LineType result = xParser.GetLineType(line);
+			Parser.LineType result = Parser.GetLineType(line);
 
 			// Assert
 			Assert.AreEqual(result, expected);
@@ -63,7 +63,7 @@ namespace Konves.ChordPro.UnitTests
 			// Arrange
 
 			// Act
-			List<string> result = xParser.SplitIntoBlocks(line).ToList();
+			List<string> result = Parser.SplitIntoBlocks(line).ToList();
 
 			// Assert
 			CollectionAssert.AreEqual(expectedBlocks, result);
@@ -87,7 +87,7 @@ namespace Konves.ChordPro.UnitTests
 			// Arrange
 
 			// Act
-			List<string> result = xParser.SplitIntoSyllables(block).ToList();
+			List<string> result = Parser.SplitIntoSyllables(block).ToList();
 
 			// Assert
 			CollectionAssert.AreEqual(expectedSyllables, result);
@@ -110,7 +110,7 @@ namespace Konves.ChordPro.UnitTests
 
 			// Act
 			Chord chord;
-			bool result = xParser.TryParseChord(s, out chord);
+			bool result = Parser.TryParseChord(s, out chord);
 
 			// Assert
 			Assert.AreEqual(expectedResult, result);
@@ -130,7 +130,7 @@ namespace Konves.ChordPro.UnitTests
 		private void DoParseSyllableTest(string s, Syllable expectedSyllable)
 		{
 			// Arrange
-			xParser sut = new xParser(null);
+			Parser sut = new Parser(null);
 
 			// Act
 			Syllable result = sut.ParseSyllable(s);
@@ -179,7 +179,7 @@ namespace Konves.ChordPro.UnitTests
 		private void DoParseBlockTest(string s, Block expected)
 		{
 			// Arrange
-			xParser sut = new xParser(null);
+			Parser sut = new Parser(null);
 
 			// Act
 			Block result = sut.ParseBlock(s);

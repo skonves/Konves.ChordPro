@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Konves.ChordPro
 {
-	internal sealed class xParser
+	internal sealed class Parser
 	{
-		internal xParser(TextReader textReader) : this(textReader, null)
+		internal Parser(TextReader textReader) : this(textReader, null)
 		{
 		}
 
-		internal xParser(TextReader textReader, IEnumerable<DirectiveHandler> customHandlers)
+		internal Parser(TextReader textReader, IEnumerable<DirectiveHandler> customHandlers)
 		{
 			_textReader = textReader;
 			_directiveParsers = DirectiveHandlerUtility.GetHandlersDictionaryByName(customHandlers);
