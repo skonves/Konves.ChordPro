@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Konves.ChordPro.UnitTests
@@ -9,6 +10,23 @@ namespace Konves.ChordPro.UnitTests
 	[TestClass]
 	public class ParserTestFixture
 	{
+		[TestMethod]
+		public void ParseSongLineTest()
+		{
+			// Arrange
+			Parser sut = new Parser(null);
+			string line = "asdf [X]asdf asdf";
+			int expectedBlockCount = 3;
+
+			// Act
+			SongLine result = sut.ParseSongLine(line);
+
+			// Assert
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Blocks);
+			Assert.AreEqual(expectedBlockCount, result.Blocks.Count);
+		}
+
 		[TestMethod]
 		public void GetLineTypeTest()
 		{
@@ -20,6 +38,17 @@ namespace Konves.ChordPro.UnitTests
 			DoGetLineTypeTest("    song line", Parser.LineType.Text);
 			DoGetLineTypeTest("", Parser.LineType.Whitespace);
 			DoGetLineTypeTest("    ", Parser.LineType.Whitespace);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void GetLineTypeTest_Null()
+		{
+			// Arrange
+			string s = null;
+
+			// Act
+			Parser.LineType result = Parser.GetLineType(s);
 		}
 
 		private void DoGetLineTypeTest(string line, Parser.LineType expected)
@@ -56,6 +85,17 @@ namespace Konves.ChordPro.UnitTests
 			DoSplitIntoBlocksTest("asdf asdf[ x ]asdf asdf", "asdf", "asdf[ x ]asdf", "asdf");
 			DoSplitIntoBlocksTest("asdf [ x ][ x ]asdf[ x ][ x ] asdf", "asdf", "[ x ][ x ]asdf[ x ][ x ]", "asdf");
 			DoSplitIntoBlocksTest("asdf asdf[ x ][ x ]asdf asdf", "asdf", "asdf[ x ][ x ]asdf", "asdf");
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void SplitIntoBlocksTest_Null()
+		{
+			// Arrange
+			string line = null;
+
+			// Act
+			List<string> result = Parser.SplitIntoBlocks(line).ToList();
 		}
 
 		private void DoSplitIntoBlocksTest(string line, params string[] expectedBlocks)
@@ -125,6 +165,18 @@ namespace Konves.ChordPro.UnitTests
 			DoParseSyllableTest("[X]", new Syllable(new Chord("X"), null));
 			DoParseSyllableTest("[X]asdf", new Syllable(new Chord("X"), "asdf"));
 			DoParseSyllableTest("asdf", new Syllable(null, "asdf"));
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(FormatException))]
+		public void ParseSyllableTest_Exception()
+		{
+			// Arrange
+			Parser sut = new Parser(null);
+			string syllable = "[]";
+
+			// Act
+			Syllable result = sut.ParseSyllable(syllable);
 		}
 
 		private void DoParseSyllableTest(string s, Syllable expectedSyllable)
@@ -204,6 +256,102 @@ namespace Konves.ChordPro.UnitTests
 
 				Assert.AreEqual(expectedWord.Syllables.Count, resultWord.Syllables.Count);
 			}
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(FormatException))]
+		public void ParseDirectiveTest_NotADirective()
+		{
+			// Arrange
+			string line = "{some invalid format";
+			Parser sut = new Parser(null);
+
+			// Act
+			Directive result = sut.ParseDirective(line);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(FormatException))]
+		public void ParseDirectiveTest_UnknownDirective()
+		{
+			// Arrange
+			string line = "{unknowndirective}";
+			Parser sut = new Parser(null);
+
+			// Act
+			Directive result = sut.ParseDirective(line);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(FormatException))]
+		public void ParseDirectiveTest_InvalidFormat()
+		{
+			// Arrange
+			string line = "{title}"; // Missing value
+			Parser sut = new Parser(null);
+
+			// Act
+			Directive result = sut.ParseDirective(line);
+		}
+
+		[TestMethod]
+		public void ParseDirectiveTest_StartOfTab()
+		{
+			// Arrange
+			string line = "{start_of_tab}";
+			bool expectedIsInTab = true;
+			Parser sut = new Parser(null);
+
+			// Act
+			Directive result = sut.ParseDirective(line);
+
+			// Assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual(expectedIsInTab, sut._isInTab);
+		}
+
+		[TestMethod]
+		public void ParseDirectiveTest_EndOfTab()
+		{
+			// Arrange
+			string line = "{end_of_tab}";
+			bool expectedIsInTab = false;
+			Parser sut = new Parser(null);
+
+			// Act
+			Directive result = sut.ParseDirective(line);
+
+			// Assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual(expectedIsInTab, sut._isInTab);
+		}
+
+		[TestMethod]
+		public void ParseTest()
+		{
+			// Arrange
+			string song = @"# Comment
+{sot}
+   tab line
+{eot}
+
+Song Line preceded by whitespace";
+			int expectedLineCount = 5;
+			TextReader reader = new StringReader(song);
+			Parser sut = new Parser(reader);
+
+			// Act
+			List<ILine> result = sut.Parse().ToList();
+
+			// Assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual(expectedLineCount, result.Count);
+			Assert.IsInstanceOfType(result[0], typeof(StartOfTabDirective));
+			Assert.IsInstanceOfType(result[1], typeof(TabLine));
+			Assert.IsInstanceOfType(result[2], typeof(EndOfTabDirective));
+			Assert.IsInstanceOfType(result[3], typeof(SongLine));
+			Assert.IsInstanceOfType(result[4], typeof(SongLine));
+
 		}
 	}
 }

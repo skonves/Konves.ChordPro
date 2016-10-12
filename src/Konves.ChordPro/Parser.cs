@@ -4,9 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Konves.ChordPro
 {
@@ -60,9 +57,9 @@ namespace Konves.ChordPro
 		internal Directive ParseDirective(string line)
 		{
 			DirectiveComponents components;
-			DirectiveHandler parser;
+			DirectiveHandler handler;
 			Directive directive;
-			if (DirectiveComponents.TryParse(line, out components) && _directiveParsers.TryGetValue(components.Key, out parser) && parser.TryParse(components, out directive))
+			if (DirectiveComponents.TryParse(line, out components) && _directiveParsers.TryGetValue(components.Key, out handler) && handler.TryParse(components, out directive))
 			{
 				if (directive is StartOfTabDirective)
 					_isInTab = true;
@@ -85,6 +82,9 @@ namespace Konves.ChordPro
 
 		internal static IEnumerable<string> SplitIntoBlocks(string line)
 		{
+			if (line == null)
+				throw new ArgumentNullException();
+
 			int start = 0;
 			bool isInBlock = false;
 			bool isInChord = false;
@@ -211,39 +211,12 @@ namespace Konves.ChordPro
 			return LineType.Whitespace;
 		}
 
-		internal PageType GetPageType(string s)
-		{
-			switch (s)
-			{
-				case "a4": return PageType.A4;
-				case "letter": return PageType.Letter;
-				default: throw new FormatException($"Invalid directive value at line {_lineNumber}.");
-			}
-		}
-
-		internal Alignment GetAlignment(string s)
-		{
-			switch (s)
-			{
-				case "left": return Alignment.Left;
-				case "center": return Alignment.Center;
-				default: throw new FormatException($"Invalid directive value at line {_lineNumber}.");
-			}
-		}
-
 		internal enum LineType
 		{
 			Comment,
 			Text,
 			Directive,
 			Whitespace
-		}
-
-		internal class DirectiveParts
-		{
-			public string Key { get; set; }
-			public string SubKey { get; set; }
-			public string Value { get; set; }
 		}
 
 		readonly TextReader _textReader;

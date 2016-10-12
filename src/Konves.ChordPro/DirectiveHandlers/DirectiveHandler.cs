@@ -1,9 +1,5 @@
 ﻿using Konves.ChordPro.Directives;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Konves.ChordPro.DirectiveHandlers
 {
@@ -51,14 +47,27 @@ namespace Konves.ChordPro.DirectiveHandlers
 
 		public string GetString(Directive directive, bool shorten = false)
 		{
+			if (ReferenceEquals(directive, null))
+				throw new ArgumentNullException(nameof(directive));
+
 			string key = shorten ? ShortName : LongName;
 			string subkey = GetSubKey(directive);
 			string value = GetValue(directive);
 
-			string subkeyString = SubKey != ComponentPresence.NotAllowed && !string.IsNullOrWhiteSpace(subkey) ? " " + subkey : null;
-			string valueString = Value != ComponentPresence.NotAllowed && !string.IsNullOrWhiteSpace(value) ? ": " + value : null;
+			string subkeyString = GetSubKeyString(subkey);
+			string valueString = GetValueString(value);
 
 			return $"{{{key}{subkeyString}{valueString}}}";
+		}
+
+		internal string GetSubKeyString(string subkey)
+		{
+			return SubKey != ComponentPresence.NotAllowed && !string.IsNullOrWhiteSpace(subkey) ? " " + subkey : null;
+		}
+
+		internal string GetValueString(string value)
+		{
+			return Value != ComponentPresence.NotAllowed && !string.IsNullOrWhiteSpace(value) ? ": " + value : null;
 		}
 
 		public abstract ComponentPresence SubKey { get; }
