@@ -8,5 +8,17 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 	public class EndOfChorusHandlerTestFixture : KeyOnlyBaseTestFixture<EndOfChorusDirective>
 	{
 		public EndOfChorusHandlerTestFixture() : base("{end_of_chorus}", "{eoc}", EndOfChorusHandler.Instance) { }
+
+		[TestMethod]
+		public override void TryParseTest_LongForm() { base.TryParseTest_LongForm(); }
+
+		[TestMethod]
+		public override void TryParseTest_ShortForm() { base.TryParseTest_ShortForm(); }
+
+		[TestMethod]
+		public override void GetStringTest_LongForm() { base.GetStringTest_LongForm(); }
+
+		[TestMethod]
+		public override void GetStringTest_ShortForm() { base.GetStringTest_ShortForm(); }
 	}
 }

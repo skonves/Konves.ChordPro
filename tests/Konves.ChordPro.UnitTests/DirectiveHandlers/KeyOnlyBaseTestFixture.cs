@@ -13,9 +13,8 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 			_shortForm = shortForm;
 			_sut = sut;
 		}
-
-		[TestMethod]
-		public void TryParseTest_LongForm()
+		
+		public virtual void TryParseTest_LongForm()
 		{
 			// Arrange
 			string input = _longForm;
@@ -30,8 +29,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 			Assert.IsInstanceOfType(directive, typeof(TDirective));
 		}
 
-		[TestMethod]
-		public void TryParseTest_ShortForm()
+		public virtual void TryParseTest_ShortForm()
 		{
 			// Arrange
 			string input = _shortForm;
@@ -46,8 +44,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 			Assert.IsInstanceOfType(directive, typeof(TDirective));
 		}
 
-		[TestMethod]
-		public void GetStringTest_LongForm()
+		public virtual void GetStringTest_LongForm()
 		{
 			// Arrange
 			Directive directive = new TDirective();
@@ -60,8 +57,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 			Assert.AreEqual(expectedText, text);
 		}
 
-		[TestMethod]
-		public void GetStringTest_ShortForm()
+		public virtual void GetStringTest_ShortForm()
 		{
 			// Arrange
 			Directive directive = new TDirective();
