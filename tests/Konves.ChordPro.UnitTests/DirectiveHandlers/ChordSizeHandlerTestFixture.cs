@@ -46,6 +46,23 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		}
 
 		[TestMethod]
+		public void TryParseTest_NaN()
+		{
+			// Arrange
+			string input = $"{{chordsize: NaN}}";
+			DirectiveComponents components = DirectiveComponents.Parse(input);
+			DirectiveHandler sut = ChordSizeHandler.Instance;
+			Directive directive;
+
+			// Act
+			bool result = sut.TryParse(components, out directive);
+
+			// Assert
+			Assert.IsFalse(result);
+			Assert.IsNull(directive);
+		}
+
+		[TestMethod]
 		public void GetStringTest_LongForm()
 		{
 			// Arrange
