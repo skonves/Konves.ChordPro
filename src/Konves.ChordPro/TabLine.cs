@@ -2,11 +2,6 @@
 {
 	public sealed class TabLine : ILine
 	{
-		public TabLine()
-		{
-			Text = string.Empty;
-		}
-
 		public TabLine(string text)
 		{
 			Text = text;
