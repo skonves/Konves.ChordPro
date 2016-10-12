@@ -49,7 +49,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		public void TryParseTest_LongForm_Other()
 		{
 			// Arrange
-			string input = $"{{pagetype: not a valid alignment}}";
+			string input = $"{{titles: not a valid alignment}}";
 			DirectiveComponents components = DirectiveComponents.Parse(input);
 			DirectiveHandler sut = TitlesHandler.Instance;
 			Directive directive;

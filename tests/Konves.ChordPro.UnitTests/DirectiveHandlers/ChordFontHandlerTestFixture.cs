@@ -11,10 +11,10 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		public void TryParseTest_LongForm()
 		{
 			// Arrange
-			int fontSize = 9;
-			string input = $"{{chordsize: {fontSize}}}";
+			string fontFamily = "times";
+			string input = $"{{chordfont: {fontFamily}}}";
 			DirectiveComponents components = DirectiveComponents.Parse(input);
-			DirectiveHandler sut = ChordSizeHandler.Instance;
+			DirectiveHandler sut = ChordFontHandler.Instance;
 			Directive directive;
 
 			// Act
@@ -22,18 +22,18 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 
 			// Assert
 			Assert.IsTrue(result);
-			Assert.IsInstanceOfType(directive, typeof(ChordSizeDirective));
-			Assert.AreEqual(fontSize, (directive as ChordSizeDirective).FontSize);
+			Assert.IsInstanceOfType(directive, typeof(ChordFontDirective));
+			Assert.AreEqual(fontFamily, (directive as ChordFontDirective).FontFamily);
 		}
 
 		[TestMethod]
 		public void TryParseTest_ShortForm()
 		{
 			// Arrange
-			int fontSize = 9;
-			string input = $"{{cs: {fontSize}}}";
+			string fontFamily = "times";
+			string input = $"{{cf: {fontFamily}}}";
 			DirectiveComponents components = DirectiveComponents.Parse(input);
-			DirectiveHandler sut = ChordSizeHandler.Instance;
+			DirectiveHandler sut = ChordFontHandler.Instance;
 			Directive directive;
 
 			// Act
@@ -41,18 +41,18 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 
 			// Assert
 			Assert.IsTrue(result);
-			Assert.IsInstanceOfType(directive, typeof(ChordSizeDirective));
-			Assert.AreEqual(fontSize, (directive as ChordSizeDirective).FontSize);
+			Assert.IsInstanceOfType(directive, typeof(ChordFontDirective));
+			Assert.AreEqual(fontFamily, (directive as ChordFontDirective).FontFamily);
 		}
 
 		[TestMethod]
 		public void GetStringTest_LongForm()
 		{
 			// Arrange
-			int fontSize = 9;
-			Directive directive = new ChordSizeDirective(fontSize);
-			string expectedText = $"{{chordsize: {fontSize}}}";
-			DirectiveHandler sut = ChordSizeHandler.Instance;
+			string fontFamily = "times";
+			Directive directive = new ChordFontDirective(fontFamily);
+			string expectedText = $"{{chordfont: {fontFamily}}}";
+			DirectiveHandler sut = ChordFontHandler.Instance;
 
 			// Act
 			string text = sut.GetString(directive, shorten: false);
@@ -65,10 +65,10 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		public void GetStringTest_ShortForm()
 		{
 			// Arrange
-			int fontSize = 9;
-			Directive directive = new ChordSizeDirective(fontSize);
-			string expectedText = $"{{cs: {fontSize}}}";
-			DirectiveHandler sut = ChordSizeHandler.Instance;
+			string fontFamily = "times";
+			Directive directive = new ChordFontDirective(fontFamily);
+			string expectedText = $"{{cf: {fontFamily}}}";
+			DirectiveHandler sut = ChordFontHandler.Instance;
 
 			// Act
 			string text = sut.GetString(directive, shorten: true);
