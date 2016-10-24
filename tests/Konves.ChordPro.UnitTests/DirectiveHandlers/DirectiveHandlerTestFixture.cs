@@ -11,6 +11,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 	public class DirectiveHandlerTestFixture
 	{
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void WhenComponentKeyDoesNotMatch()
 		{
 			// Arrange
@@ -39,6 +40,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		}
 
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void WhenValueIsRequiredButIsMissing()
 		{
 			// Arrange
@@ -64,6 +66,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		}
 
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void WhenValueIsNotAllowedButIsPresent()
 		{
 			// Arrange
@@ -90,6 +93,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		}
 
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void WhenSubKeyIsRequiredButIsMissing()
 		{
 			// Arrange
@@ -115,6 +119,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		}
 
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void WhenSubKeyIsNotAllowedButIsPresent()
 		{
 			// Arrange
@@ -141,6 +146,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		}
 
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void GetSubKeyStringTest()
 		{
 			DoGetSubKeyStringTest("asdf", ComponentPresence.NotAllowed, null);
@@ -165,6 +171,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		}
 
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void GetValueStringTest()
 		{
 			DoGetValueStringTest("asdf", ComponentPresence.NotAllowed, null);
@@ -193,6 +200,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		}
 
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void GetStringTest()
 		{
 			DoGetStringTest("longName", "shortName", "subkey", "value", false, "{longName subkey: value}");
@@ -223,6 +231,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentNullException))]
+		[TestCategory("DirectiveHandler")]
 		public void GetStringTest_Null()
 		{
 			// Arrange

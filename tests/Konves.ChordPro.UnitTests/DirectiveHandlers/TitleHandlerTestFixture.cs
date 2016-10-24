@@ -8,6 +8,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 	public class TitleHandlerTestFixture
 	{
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void TryParseTest_LongForm()
 		{
 			// Arrange
@@ -27,6 +28,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		}
 
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void TryParseTest_ShortForm()
 		{
 			// Arrange
@@ -46,6 +48,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		}
 
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void GetStringTest_LongForm()
 		{
 			// Arrange
@@ -62,6 +65,7 @@ namespace Konves.ChordPro.UnitTests.DirectiveHandlers
 		}
 
 		[TestMethod]
+		[TestCategory("DirectiveHandler")]
 		public void GetStringTest_ShortForm()
 		{
 			// Arrange
