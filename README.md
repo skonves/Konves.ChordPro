@@ -1,5 +1,11 @@
 # Konves.ChordPro
 
+This library provides a Serializer/Deserializer and Object Model for working with
+ChordPro documents.  All "official" directives are supported, and custom directives
+can be defined to handle the many extensions to the ChordPro format (see below).
+The Object Model is composed of mutable POCOs to facilitate serialization using 
+libraries such as JSON.net or the .Net XmlSerializer.
+
 ## Quick Start
 
 Get the NuGet package and then do this:
