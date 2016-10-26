@@ -1,3 +1,7 @@
+[![Build status](https://img.shields.io/appveyor/ci/skonves/konves-chordpro.svg?maxAge=60)](https://ci.appveyor.com/project/skonves/konves-chordpro)
+[![Test coverage](https://img.shields.io/coveralls/skonves/Konves.ChordPro.svg?maxAge=60)](https://coveralls.io/github/skonves/Konves.ChordPro/)
+[![Nuget package](https://img.shields.io/nuget/v/Konves.Chordpro.svg?maxAge=60)](https://www.nuget.org/packages/Konves.ChordPro/)
+
 # Konves.ChordPro
 
 This library provides a Serializer/Deserializer and Object Model for working with
