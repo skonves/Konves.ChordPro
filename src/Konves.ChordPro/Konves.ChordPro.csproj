@@ -57,6 +57,7 @@
     <Compile Include="DirectiveHandlers\StartOfTabHandler.cs" />
     <Compile Include="DirectiveHandlers\SubtitleHandler.cs" />
     <Compile Include="ILine.cs" />
+    <Compile Include="SerializerSettings.cs" />
     <Compile Include="SongLine.cs" />
     <Compile Include="Syllable.cs" />
     <Compile Include="DirectiveHandlers\TextFontHandler.cs" />
