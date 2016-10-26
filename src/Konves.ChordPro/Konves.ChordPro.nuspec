@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Konves.ChordPro</id>
+    <title>Konves.ChordPro</title>
+    <version>$version$</version>
+    <authors>skonves</authors>
+    <owners>skonves</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/skonves/Konves.ChordPro</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>C# ChordPro document parser</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2016 $author$</copyright>
+    <tags>chordpro</tags>
+  </metadata>
+  <files>
+    <file src="$project$bin\$configuration$\*.pdb" target="lib\net452" />
+  </files>
+</package>

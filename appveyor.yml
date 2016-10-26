@@ -1,0 +1,26 @@
+environment:
+  COVERALLS_REPO_TOKEN:
+    secure: +CnLuia67Ji4t+kIEOHEENb7X+9LFf/KST8luxjr5ogU5xacZxypFQqq+At6LIf5
+version: 0.0.{build}
+configuration: Release
+assembly_info:
+  patch: true
+  assembly_version: $(appveyor_build_version)
+  assembly_file_version: $(appveyor_build_version)
+before_build:
+  - nuget restore
+build:
+  publish_nuget: true
+  verbosity: minimal
+after_test:
+- cmd: .\coverage.cmd
+before_package:
+- ps: >-
+    $version = `
+      IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {"$env:APPVEYOR_BUILD_VERSION"} `
+      ELSE { IF ($env:APPVEYOR_REPO_BRANCH -eq "test") {"$env:APPVEYOR_BUILD_VERSION-beta"} `
+      ELSE {"$env:APPVEYOR_BUILD_VERSION-alpha"} }
+
+    (Get-Content "$env:APPVEYOR_BUILD_FOLDER\src\Konves.ChordPro\Konves.ChordPro.nuspec") `
+        -replace '<version>[^<]*?</version>', ('<version>{0}</version>' -f $version) |
+      Out-File "$env:APPVEYOR_BUILD_FOLDER\src\Konves.ChordPro\Konves.ChordPro.nuspec"

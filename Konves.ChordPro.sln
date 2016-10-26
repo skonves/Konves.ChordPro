@@ -8,6 +8,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B1633C4E-0781-4167-8D41-CC4D20281648}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{9945B495-4B8D-4D68-A1BD-BA69866A202B}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+		coverage.cmd = coverage.cmd
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konves.ChordPro.UnitTests", "tests\Konves.ChordPro.UnitTests\Konves.ChordPro.UnitTests.csproj", "{B3436019-15F5-4406-9B9D-65F57FFCDCA3}"
 EndProject
